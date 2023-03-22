@@ -13,3 +13,6 @@
  Will i use it in the future? Most likely no.
  Will i come back to steal some methods i liked? for sure.
  To be fully honest, this is my first time with API's and actually undestanding how python dictionaries work, it was fun.
+
+
+PS. the API Key i don't care about, i got it free of charge anyway. if someone decides to abuse it, go at it. I just say this, You are doing nothing but wasting your time, because i won't lose anything. On the other hand you will be losing time.
