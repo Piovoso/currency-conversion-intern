@@ -7,23 +7,26 @@ currencies = ('AUD','CAD','PEN','EUR','GBP', #List of curriencies available.
 intermediary = {}
 
 class currencyConversion:
-	def main():
+	def main(userAmount:float, userFrom:str, userTo:str, unitTest:bool=True):
+
 		url = "https://currency-exchange.p.rapidapi.com/exchange"                   # API URL
 		headers = {
 			"X-RapidAPI-Key": "e38d990d1cmsh2e9f27958ea4b2dp197761jsnb1b11869fbf2", # API KEY
 			"X-RapidAPI-Host": "currency-exchange.p.rapidapi.com"                   # API HOST
 		}
 		try:
-			userAmount = float(input(f'Amount: '))
-			userFrom = userTo = None # creating variables for the user selected curriencies.
+			if not unitTest:
+				userAmount = float(input(f'Amount: '))
+				userFrom = userTo = None # creating variables for the user selected curriencies.
 
-			while userFrom not in currencies or userTo not in currencies: # Making sure the user choses one of the available currencies
-				userFrom = input(f'From Currency {currencies}: ').upper()
-				userTo = input(f'To Currency {currencies}: ').upper()
-				intermediary.update({ "customer":{ userFrom:{}, userTo:{} }, "bank":{ userFrom:{}, userTo:{} } })  # updating a dictionary to hold data
+				while userFrom not in currencies or userTo not in currencies: # Making sure the user choses one of the available currencies
+					userFrom = input(f'From Currency {currencies}: ').upper()
+					userTo = input(f'To Currency {currencies}: ').upper()
+
+			intermediary.update({ "customer":{ userFrom:{}, userTo:{} }, "bank":{ userFrom:{}, userTo:{} } })  # updating a dictionary to hold data
 
 			# i hate these for-loops, but unfortunately i don't posess the skills yet to do it another way.
-			for i in currencies:                        
+			for i in currencies:
 				if i == userFrom or i == userTo: pass   # skips selected currencies
 				else: currencyConversion.query(headers, url, userFrom, i, userAmount, (userFrom, userTo)) 
 
@@ -41,8 +44,13 @@ class currencyConversion:
 			IPython.display.display_png(pdFrame)    # Using Ipython.display because it worked the best
 
 			# honestly I hate and love both of these lines, so complex that it's kinda amazing but really horrible.
-			print(f'Best for Customer: {list(intermediary["customer"][userTo].keys())[list(intermediary["customer"][userTo].values()).index(max(intermediary["customer"][userTo].values()))]}')
-			print(f'Best for Service Provider: {list(intermediary["bank"][userTo].keys())[list(intermediary["bank"][userTo].values()).index(max(intermediary["bank"][userTo].values()))]}')
+			customerBest = list(intermediary["customer"][userTo].keys())[list(intermediary["customer"][userTo].values()).index(max(intermediary["customer"][userTo].values()))]
+			providerBest = list(intermediary["bank"][userTo].keys())[list(intermediary["bank"][userTo].values()).index(max(intermediary["bank"][userTo].values()))]
+			print(f'Best for Customer: {customerBest}')
+			print(f'Best for Service Provider: {providerBest}')
+
+			if unitTest:
+				return customerBest, providerBest
 
 			#	 _	 Quack
 			# __(.)<
